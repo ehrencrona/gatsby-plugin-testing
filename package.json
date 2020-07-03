@@ -1,0 +1,31 @@
+{
+  "name": "gatsby-plugin-testing",
+  "version": "0.1.0",
+  "description": "Gatsby plugin enabling unit testing of code using GraphQL queries.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ehrencrona/gatsby-plugin-testing.git"
+  },
+  "keywords": [
+    "unit",
+    "testing",
+    "graphql",
+    "gatsby",
+    "gatsby-plugin",
+    "mocks"
+  ],
+  "author": "Andreas Ehrencrona",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ehrencrona/gatsby-plugin-testing/issues"
+  },
+  "homepage": "https://github.com/ehrencrona/gatsby-plugin-testing#readme",
+  "peerDependencies": {
+    "gatsby": ">=2.10.0",
+    "react": ">=16.8"
+  }
+}
