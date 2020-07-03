@@ -1,7 +1,7 @@
 {
   "name": "gatsby-plugin-testing",
   "version": "0.1.0",
-  "description": "Gatsby plugin enabling unit testing of code using GraphQL queries.",
+  "description": "Gatsby plugin enabling unit testing of components that use GraphQL queries.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

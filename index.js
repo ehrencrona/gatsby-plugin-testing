@@ -1,6 +1,6 @@
-import { readFile, exists, readdirSync, lstat } from "fs";
-import { join } from "path";
-import { promisify } from "util";
+const { readFile, exists, readdirSync, lstat } = require("fs");
+const { join } = require("path");
+const { promisify } = require("util");
 
 const asyncExists = promisify(exists);
 const asyncLstat = promisify(lstat);
@@ -14,7 +14,7 @@ const pageDataFileNameWithoutPath = `page-data.json`;
  * Assumes `gatsby build` has been run before.
  * @param {*} pagePath The URL path of the page that performs the query.
  */
-export async function getPageQueryData(pagePath) {
+async function getPageQueryData(pagePath) {
   const pageDataFileName = await getPageDataFile(pagePath);
 
   const pageData = JSON.parse(await asyncReadFile(pageDataFileName));
@@ -83,3 +83,5 @@ async function isDirectory(path) {
 
   return stat.isDirectory();
 }
+
+module.exports = { getPageQueryData };

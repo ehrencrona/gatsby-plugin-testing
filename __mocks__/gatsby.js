@@ -1,8 +1,8 @@
 const React = require("react");
 const gatsby = jest.requireActual("gatsby");
 
-import graphql from "../src/graphql";
-import {  useStaticQuery, StaticQuery } from '../src/static-query'
+const graphql = require("../src/graphql");
+const { useStaticQuery, StaticQuery } = require("../src/static-query");
 
 module.exports = {
   ...gatsby,
