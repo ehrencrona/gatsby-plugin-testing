@@ -26,6 +26,7 @@
   "homepage": "https://github.com/ehrencrona/gatsby-plugin-testing#readme",
   "peerDependencies": {
     "gatsby": ">=2.10.0",
-    "react": ">=16.8"
+    "react": ">=16.8",
+    "jest": ">=26.0"
   }
 }
