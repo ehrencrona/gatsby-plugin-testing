@@ -150,3 +150,7 @@ describe("MarkdownPage", () => {
 ```
 
 Note that `getPageQueryData` is an async function so you must call `await`.
+
+# Contact
+
+Problems? Suggestions? Feel free to open a Github issue or contact me at andreas.ehrencrona@velik.it
