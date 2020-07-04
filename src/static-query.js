@@ -34,8 +34,15 @@ const StaticQuery = ({ render, query }) => {
 async function storeStaticQueries(staticQueries) {
   await asyncWriteFile(
     staticQueryFileName,
-    JSON.stringify(Object.fromEntries(staticQueries))
+    JSON.stringify(objectFromEntries(staticQueries))
   );
+}
+
+/**
+ * This is Object.fromEntries, which is not available in Node 10
+ */
+function objectFromEntries(arr) {
+  return Object.assign({}, ...Array.from(arr, ([k, v]) => ({ [k]: v })));
 }
 
 // unfortunately, we need this function to be synchronous, since useStaticQuery is
