@@ -1,6 +1,6 @@
 {
   "name": "gatsby-plugin-testing",
-  "version": "0.1.1",
+  "version": "0.2",
   "description": "Gatsby plugin enabling unit testing of components that use GraphQL queries.",
   "main": "index.js",
   "scripts": {
