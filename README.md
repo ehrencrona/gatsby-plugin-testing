@@ -12,10 +12,10 @@ This is not only awkward for your component code but it also makes it impossible
 
 Gatsby Unit Testing Plugin stores your query data when you build your project. It will then be available to components on later test runs.
 
-Because data is stored when you run `gatsby build`, these are the steps to start testing:
+Because data is stored when you run `gatsby build` or `gatsby develop`, these are the steps to start testing:
 
 1. Add the `gatsby-plugin-testing` to your project
-2. Run `gatsby build`
+2. Run `gatsby build` or `gatsby develop`
 3. Run your tests
 
 If you modify the queries of your components, you must rerun `gatsby build` since your tests will otherwise use query results that reflect the previous queries.
@@ -45,7 +45,7 @@ export * from "gatsby-plugin-testing/__mocks__/gatsby"
 
 ### Run gatsby build
 
-Now run `gatsby build` in your project. You should see
+Now run `gatsby build` or `gatsby develop` in your project. You should see
 
 ```
 [testing] stored static queries
@@ -53,12 +53,17 @@ Now run `gatsby build` in your project. You should see
 
 somewhere in the build output. If you don't, check that you have completed all previous steps.
 
+When running `gatsby develop`, you will see this output repeated every time your queries change.
+
 The queries will be stored in a file `.testing-static-queries.json`. This file does not need to be checked in so you can add it to your `.gitignore`.
 
 ### Run your tests
 
 Unit testing components with static queries should now "just work". If you have not yet set up tests in your project, configure Jest as described in [the Gatsby unit testing documentation](https://www.gatsbyjs.org/docs/unit-testing/).
 
+You can also run your tests in watch mode. If you change a query, your tests will re-run automatically with the most recent data. 
+
+Watch mode requires leaving `gatsby develop` running. In other words, first start `gatsby develop`, then open a new terminal window and launch your tests there in watch mode.
 
 ## Static queries
 

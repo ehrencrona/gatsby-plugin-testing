@@ -19,7 +19,7 @@ export async function getPageQueryData(pagePath) {
 
   const pageData = JSON.parse(await asyncReadFile(pageDataFileName));
 
-  return pageDataToQueryData(pageData);
+  return pageDataToQueryData(pageData, pagePath);
 }
 
 /**
@@ -50,14 +50,18 @@ async function getPageDataFile(pagePath) {
 /**
  * Given the page data (that Gatsby stores for a page), return the page query data (the result of the GraphQL query).
  */
-function pageDataToQueryData(pageData) {
-  const pageQueryData = pageData.result.data;
+function pageDataToQueryData(pageData, pagePath) {
+  const pageQueryData = pageData.result && pageData.result.data;
 
   if (pageQueryData) {
     return pageQueryData;
+  } else if (pageData.result) {
+    throw new Error(
+      `The page query for ${pagePath} was not available. The query was probably invalid. Check the output of gatsby build / develop.`
+    );
   } else {
     throw new Error(
-      `Expected the page data to contain the key result.data, but it did not. Top-level keys: ${Object.keys(
+      `Expected the page data for ${pagePath} to contain the key result.data, but it did not. Top-level keys: ${Object.keys(
         pageData
       )}.`
     );
