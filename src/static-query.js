@@ -1,7 +1,9 @@
 // cannot use import keyword in any file called by gatsby-node for whatever reason
 const { writeFile, existsSync, readFileSync } = require("fs");
+const { relative } = require("path");
 const { promisify } = require("util");
 const { GraphQLQuery } = require("./graphql");
+const { overrideWithSnapshotData } = require("./query-snapshot");
 
 const asyncWriteFile = promisify(writeFile);
 
@@ -17,7 +19,11 @@ function useStaticQuery(query) {
     );
   }
 
-  return getQueryResult(getQueryHashForComponentPath(query.componentPath)).data;
+  return overrideWithSnapshotData(
+    () =>
+      getQueryResult(getQueryHashForComponentPath(query.componentPath)).data,
+    makeRelative(query.componentPath)
+  );
 }
 
 /**
@@ -26,9 +32,13 @@ function useStaticQuery(query) {
 const StaticQuery = ({ render, query }) => {
   expectQuery(query);
 
-  return render(
-    getQueryResult(getQueryHashForComponentPath(query.componentPath)).data
+  const queryData = overrideWithSnapshotData(
+    () =>
+      getQueryResult(getQueryHashForComponentPath(query.componentPath)).data,
+    makeRelative(query.componentPath)
   );
+
+  return render(queryData);
 };
 
 async function storeStaticQueries(staticQueries) {
@@ -78,9 +88,15 @@ function getQueryResult(hash) {
   if (existsSync(queryDataFileName)) {
     return JSON.parse(readFileSync(queryDataFileName));
   } else {
-    throw new Error(
-      `Cannot find ${queryDataFileName}. The stored query data seem to be out of sync with the build. Delete ${staticQueryFileName} and run "gatsby clean" and "gatsby build".`
-    );
+    if (existsSync("public")) {
+      throw new Error(
+        `Cannot find ${queryDataFileName}. The stored query data seem to be out of sync with the build. Delete ${staticQueryFileName} and run "gatsby clean" and "gatsby build".`
+      );
+    } else {
+      throw new Error(
+        `You need to run "gatsby build" or "gatsby develop" for query data to be available.`
+      );
+    }
   }
 }
 
@@ -90,6 +106,10 @@ function expectQuery(query) {
       `useStaticQuery expects to be passed a graphql\`...\` object. Got: ${query}`
     );
   }
+}
+
+function makeRelative(path) {
+  return relative(".", path);
 }
 
 module.exports = {

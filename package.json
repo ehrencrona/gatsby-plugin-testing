@@ -1,6 +1,6 @@
 {
   "name": "gatsby-plugin-testing",
-  "version": "0.2",
+  "version": "0.3.0",
   "description": "Gatsby plugin enabling unit testing of components that use GraphQL queries.",
   "main": "index.js",
   "scripts": {
@@ -26,7 +26,10 @@
   "homepage": "https://github.com/ehrencrona/gatsby-plugin-testing#readme",
   "peerDependencies": {
     "gatsby": ">=2.10.0",
-    "react": ">=16.8",
-    "jest": ">=26.0"
+    "jest": ">=26.0",
+    "react": ">=16.8"
+  },
+  "dependencies": {
+    "chalk": "^4.1.0"
   }
 }

@@ -42,13 +42,12 @@ Then create a file called `__mocks__/gatsby.js` in your project containing a sin
 export * from "gatsby-plugin-testing/__mocks__/gatsby"
 ```
 
-
 ### Run gatsby build
 
 Now run `gatsby build` or `gatsby develop` in your project. You should see
 
 ```
-[testing] stored static queries
+[gatsby-plugin-testing] stored static queries
 ```
 
 somewhere in the build output. If you don't, check that you have completed all previous steps.
@@ -61,7 +60,7 @@ The queries will be stored in a file `.testing-static-queries.json`. This file d
 
 Unit testing components with static queries should now "just work". If you have not yet set up tests in your project, configure Jest as described in [the Gatsby unit testing documentation](https://www.gatsbyjs.org/docs/unit-testing/).
 
-You can also run your tests in watch mode. If you change a query, your tests will re-run automatically with the most recent data. 
+You can also run your tests in watch mode. If you change a query, your tests will re-run automatically with the most recent data.
 
 Watch mode requires leaving `gatsby develop` running. In other words, first start `gatsby develop`, then open a new terminal window and launch your tests there in watch mode.
 
@@ -107,13 +106,11 @@ describe("Image", () => {
 
 The same goes for static queries using the `StaticQuery` component.
 
-
 ## Page queries
 
 Testing a [page query with variables](https://www.gatsbyjs.org/docs/page-query/#how-to-add-query-variables-to-a-page-query) involves only one additional step; you must specify which specific page you're testing.
 
 Consider the following page rendering markdown:
-
 
 ```
 export const query = graphql`
@@ -155,6 +152,45 @@ describe("MarkdownPage", () => {
 ```
 
 Note that `getPageQueryData` is an async function so you must call `await`.
+
+## Snapshots
+
+For some components it may be a problem that the Graph QL data is "live". If you're testing a page displaying
+the latest blog post, the test will fail every time you publish a new post.
+
+To "freeze" the Graph QL data of your test, you can snapshot it. If you wrap a test with `withQuerySnapshot`, it
+will snapshot the Graph QL data when you first run the test. On subsequent runs, the test will use the snapshotted data instead of the query results in Gatsby.
+
+```
+  import { withQuerySnapshot } from "gatsby-plugin-testing"
+
+  it('renders', withQuerySnapshot(() => {
+      ...
+      expect(component).toMatchSnapshot()
+    })
+  )
+```
+
+This concept is similar to snapshots in Jest, except that the data serves as input to your code rather than being its output.
+
+Beyond freezing data to make tests more stable, it also enables them to run without a `gatsby build`, which can be useful in a CI environment.
+
+Snapshots are stored together with Jest snapshots in files called `__snapshots__/<your test name>.gql.json`.
+
+To update the snapshots to the current data you have three options:
+
+- delete the snapshots manually and run the tests
+- set the environment variable `UPDATE_GQL` to `true` and run the tests. On Linux and Macs you'd run `UPDATE_GQL=true jest` (replace "jest" by whatever command you use to run your tests, e.g. `yarn test`).
+- run tests in watch mode and press "g". This will update all GraphQL snapshots.
+
+For snapshots to work you need to configure the following in your [Jest configuration](https://jestjs.io/docs/en/configuration). It can be found either in a file called `jest.config.js` in your project root or under the key `jest` in your `package.json`
+
+```
+  watchPathIgnorePatterns: ["\\.gql\\.json$"],
+  watchPlugins: ["gatsby-plugin-testing/jest-plugin"],
+```
+
+The first line makes Jest watchers not trigger when snapshots are updated. The second line adds the "g" option to Jest when you run in watch mode.
 
 # Contact
 

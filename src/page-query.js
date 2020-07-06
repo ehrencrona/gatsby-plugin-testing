@@ -1,6 +1,7 @@
 const { readFile, exists, readdirSync, lstat } = require("fs");
 const { join } = require("path");
 const { promisify } = require("util");
+const { overrideWithSnapshotData } = require("./query-snapshot");
 
 const asyncExists = promisify(exists);
 const asyncLstat = promisify(lstat);
@@ -14,7 +15,14 @@ const pageDataFileNameWithoutPath = `page-data.json`;
  * Assumes `gatsby build` has been run before.
  * @param {*} pagePath The URL path of the page that performs the query.
  */
-export async function getPageQueryData(pagePath) {
+export function getPageQueryData(pagePath) {
+  return overrideWithSnapshotData(
+    () => getPageQueryDataFromFile(pagePath),
+    pagePath
+  );
+}
+
+async function getPageQueryDataFromFile(pagePath) {
   const pageDataFileName = await getPageDataFile(pagePath);
 
   const pageData = JSON.parse(await asyncReadFile(pageDataFileName));

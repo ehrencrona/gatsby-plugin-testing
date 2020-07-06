@@ -5,7 +5,7 @@ const whenQuiet = require("./src/when-quiet");
 const debounceInterval = 200;
 
 async function storeStaticQueriesFromState({ reporter, parentSpan }) {
-  const activity = reporter.activityTimer(`[testing] stored static queries`, {
+  const activity = reporter.activityTimer(`[gatsby-plugin-testing] stored static queries`, {
     parentSpan,
   });
 
