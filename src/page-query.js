@@ -15,7 +15,7 @@ const pageDataFileNameWithoutPath = `page-data.json`;
  * Assumes `gatsby build` has been run before.
  * @param {*} pagePath The URL path of the page that performs the query.
  */
-export function getPageQueryData(pagePath) {
+function getPageQueryData(pagePath) {
   return overrideWithSnapshotData(
     () => getPageQueryDataFromFile(pagePath),
     pagePath
@@ -95,3 +95,5 @@ async function isDirectory(path) {
 
   return stat.isDirectory();
 }
+
+module.exports = { getPageQueryData };
