@@ -83,9 +83,14 @@ function getQueryHashForComponentPath(componentPath) {
 }
 
 function getQueryResult(hash) {
-  const queryDataFileName = `public/static/d/${hash}.json`;
+  const queryDataFileNameLegacy = `public/static/d/${hash}.json`;
+  // Gatsby ^v2.24.33
+  const queryDataFileName = `public/page-data/sq/d/${hash}.json`;
 
-  if (existsSync(queryDataFileName)) {
+  if (existsSync(queryDataFileNameLegacy)) {
+    return JSON.parse(readFileSync(queryDataFileNameLegacy));
+  }
+  else if (existsSync(queryDataFileName)) {
     return JSON.parse(readFileSync(queryDataFileName));
   } else {
     if (existsSync("public")) {
