@@ -7,7 +7,7 @@ const asyncExists = promisify(exists);
 const asyncLstat = promisify(lstat);
 const asyncReadFile = promisify(readFile);
 
-const pageDataPath = `public/page-data`;
+const pageDataPath = join("public", "page-data");
 const pageDataFileNameWithoutPath = `page-data.json`;
 
 /**
