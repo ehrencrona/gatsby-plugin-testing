@@ -75,7 +75,7 @@ function getQueryHashForComponentPath(componentPath) {
 
   if (!component) {
     throw new Error(
-      `While getting static query data: Did not find component ${componentPath}, only: ${components
+      `While getting static query data: Did not find component ${normalizedPath}, only: ${components
         .map((c) => c.componentPath)
         .join("\n")}\nDo you need to re-run gatsby build?`
     );
