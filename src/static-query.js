@@ -68,18 +68,15 @@ function readStaticQueries() {
 
 function getQueryHashForComponentPath(componentPath) {
   const components = Object.values(readStaticQueries());
-
-  const component = components.find((c) => c.componentPath == componentPath);
+  
+	// on windows, componentPath has backward slashes but the query hash forward slashes
+  const normalizedPath = sep == "\\" ? componentPath.replace(/\\/g, "/") : componentPath;
+  const component = components.find((c) => c.componentPath == normalizedPath);
 
   if (!component) {
     throw new Error(
-      `While getting static query data: Did not find component ${componentPath}, only: ${components
-        .map((c) => {
-          const path = c.componentPath;
-
-          // on windows, componentPath has backward slashes but the query hash forward slashes
-          return sep == "\\" ? path.replace(/\\/g, "/") : path;
-        })
+      `While getting static query data: Did not find component ${normalizedPath}, only: ${components
+        .map((c) => c.componentPath)
         .join("\n")}\nDo you need to re-run gatsby build?`
     );
   }
