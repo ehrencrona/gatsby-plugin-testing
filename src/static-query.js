@@ -1,6 +1,6 @@
 // cannot use import keyword in any file called by gatsby-node for whatever reason
 const { writeFile, existsSync, readFileSync } = require("fs");
-const { relative } = require("path");
+const { relative, join, sep } = require("path");
 const { promisify } = require("util");
 const { GraphQLQuery } = require("./graphql");
 const { overrideWithSnapshotData } = require("./query-snapshot");
@@ -68,12 +68,14 @@ function readStaticQueries() {
 
 function getQueryHashForComponentPath(componentPath) {
   const components = Object.values(readStaticQueries());
-
-  const component = components.find((c) => c.componentPath == componentPath);
+  
+	// on windows, componentPath has backward slashes but the query hash forward slashes
+  const normalizedPath = sep == "\\" ? componentPath.replace(/\\/g, "/") : componentPath;
+  const component = components.find((c) => c.componentPath == normalizedPath);
 
   if (!component) {
     throw new Error(
-      `While getting static query data: Did not find component ${componentPath}, only: ${components
+      `While getting static query data: Did not find component ${normalizedPath}, only: ${components
         .map((c) => c.componentPath)
         .join("\n")}\nDo you need to re-run gatsby build?`
     );
@@ -83,9 +85,9 @@ function getQueryHashForComponentPath(componentPath) {
 }
 
 function getQueryResult(hash) {
-  const queryDataFileNameLegacy = `public/static/d/${hash}.json`;
+  const queryDataFileNameLegacy = join("public", "static", `d${hash}.json`);
   // Gatsby ^v2.24.33
-  const queryDataFileName = `public/page-data/sq/d/${hash}.json`;
+  const queryDataFileName = join("public", "page-data", "sq", `d/${hash}.json`);
 
   if (existsSync(queryDataFileNameLegacy)) {
     return JSON.parse(readFileSync(queryDataFileNameLegacy));
