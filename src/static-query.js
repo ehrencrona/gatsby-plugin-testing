@@ -85,7 +85,7 @@ function getQueryHashForComponentPath(componentPath) {
 }
 
 function getQueryResult(hash) {
-  const queryDataFileNameLegacy = join("public", "static", `d${hash}.json`);
+  const queryDataFileNameLegacy = join("public", "static", `d/${hash}.json`);
   // Gatsby ^v2.24.33
   const queryDataFileName = join("public", "page-data", "sq", `d/${hash}.json`);
 
