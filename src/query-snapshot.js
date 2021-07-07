@@ -62,7 +62,7 @@ function withQuerySnapshot(testFn) {
  * @param {*} key Cache key to store the data under in the snapshot
  */
 function overrideWithSnapshotData(getQueryData, key) {
-  key = getCurrentSpec().fullName + ": " + key;
+  key = getCurrentSpec(true)?.fullName + ": " + key;
 
   let queryData;
 
@@ -183,12 +183,12 @@ async function writeSnapshot(snapshot, testFile) {
   }
 }
 
-function getCurrentSpec() {
-  if (!current) {
+function getCurrentSpec(allowEmptyResult) {
+  if (!current && !allowEmptyResult) {
     throw new Error(`You seem to be using withQuerySnapshot outside a test.`);
   }
 
-  return current.spec;
+  return current?.spec;
 }
 
 function after(fn, valueOrPromise) {
