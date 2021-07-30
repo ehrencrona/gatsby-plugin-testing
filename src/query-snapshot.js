@@ -30,6 +30,13 @@ if (typeof jasmine != "undefined") {
     suiteDone,
   });
 }
+else {
+  console.error(
+`If you need withQuerySnapshots, Jasmine needs to be the current test runner.
+Install it using e.g. "npm i jest-jasmine2", then add "testRunner": "jest-jasmine2" to your Jest configuration.
+Your Jest configuration is typically in jest.config.js in the root of your project.
+Read more at https://jestjs.io/docs/configuration#testrunner-string`);
+}
 
 /** Wrap around a test to use Graph QL snapshots, e.g.
  * 
@@ -44,6 +51,10 @@ if (typeof jasmine != "undefined") {
  */
 function withQuerySnapshot(testFn) {
   return async () => {
+    if (!current) {
+      throw new Error(`You seem to be calling withQuerySnapshot from outside a test.`)
+    }
+
     current.isWithSnapshot = true;
 
     if (!current.snapshot) {
